@@ -1,0 +1,11 @@
+[Unit]
+Description=Remove unused nvidia mdevs (timer based)
+After=restore_nvidia_mdevs.service
+
+[Timer]
+Unit=remove_unused_nvidia_mdevs.service
+OnBootSec=300
+OnUnitActiveSec=3600
+
+[Install]
+WantedBy=timers.target

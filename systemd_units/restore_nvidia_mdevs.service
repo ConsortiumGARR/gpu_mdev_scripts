@@ -1,0 +1,11 @@
+[Unit]
+Description=Restore nvidia undefined mdevs at boot
+Before=libvirtd.service libvirt-guests.service
+After=nvidia-vgpu-mgr.service nvidia-vgpud.service
+
+[Service]
+Type=oneshot
+ExecStart=/etc/saved_nvidia_mdevs/nvidia_mdevs_undefined_restore.sh
+
+[Install]
+WantedBy=multi-user.target

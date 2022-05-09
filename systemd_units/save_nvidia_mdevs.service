@@ -1,0 +1,11 @@
+[Unit]
+Description=Backup nvidia undefined mdevs to a file
+Wants=save_nvidia_mdevs.timer
+After=restore_nvidia_mdevs.service
+
+[Service]
+Type=oneshot
+ExecStart=/etc/saved_nvidia_mdevs/nvidia_mdevs_saver.sh
+
+[Install]
+WantedBy=multi-user.target

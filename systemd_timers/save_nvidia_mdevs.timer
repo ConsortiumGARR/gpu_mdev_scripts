@@ -1,0 +1,11 @@
+[Unit]
+Description=Save nvidia mdevs (timer based)
+After=restore_nvidia_mdevs.service
+
+[Timer]
+Unit=save_nvidia_mdevs.service
+OnBootSec=300
+OnUnitActiveSec=300
+
+[Install]
+WantedBy=timers.target

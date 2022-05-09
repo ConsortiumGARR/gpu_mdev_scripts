@@ -1,0 +1,11 @@
+[Unit]
+Description=Remove unused nvidia mdevs
+Wants=remove_unused_nvidia_mdevs.timer
+After=restore_nvidia_mdevs.service
+
+[Service]
+Type=oneshot
+ExecStart=/etc/saved_nvidia_mdevs/remove_unused_nvidia_mdevs.sh
+
+[Install]
+WantedBy=multi-user.target
