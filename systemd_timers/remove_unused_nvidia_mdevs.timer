@@ -4,7 +4,7 @@ After=restore_nvidia_mdevs.service
 
 [Timer]
 Unit=remove_unused_nvidia_mdevs.service
-OnBootSec=300
+OnBootSec=600
 OnUnitActiveSec=3600
 
 [Install]

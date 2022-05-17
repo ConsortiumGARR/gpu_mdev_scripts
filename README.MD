@@ -23,6 +23,7 @@ You may need to adjust **SYSPATH** and **CREATE_PATH** env variables in **nvidia
     * `systemctl enable --now save_nvidia_mdevs.timer`
     * `systemctl enable --now remove_unused_nvidia_mdevs.timer`
     * `systemctl enable restore_nvidia_mdevs.service`
+    * `systemctl enable save_nvidia_mdevs_reboot_shutdown.service`
 
 ### find_nvidia_mdevs.sh
 1. Copy find_nvidia_mdevs.sh to **/usr/local/sbin**: `cp find_nvidia_mdevs.sh /user/local/sbin/`

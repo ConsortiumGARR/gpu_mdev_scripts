@@ -1,0 +1,12 @@
+[Unit]
+Description=Backup nvidia undefined mdevs to a file (before shutdown and reboot)
+DefaultDependencies=no
+Before=shutdown.target
+
+[Service]
+Type=oneshot
+ExecStart=/etc/saved_nvidia_mdevs/nvidia_mdevs_saver.sh /etc/saved_nvidia_mdevs/nvidia_mdevs.reboot
+TimeoutStartSec=0
+
+[Install]
+WantedBy=shutdown.target
