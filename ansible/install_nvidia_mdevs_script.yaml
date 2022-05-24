@@ -1,0 +1,82 @@
+---
+- name: Install nvidia mdevs scripts
+  hosts: all
+  become: true
+  tasks:
+
+    - name: Install mdevctl
+      apt:
+        name: mdevctl
+        state: present
+        update_cache: yes
+
+    - name: Creating /et/saved_nvidia_mdevs..
+      ansible.builtin.file:
+        path: /etc/saved_nvidia_mdevs
+        state: directory
+        mode: '0755'
+        owner: root
+        group: root
+
+    - name: Copy find_nvidia_mdevs.sh to /usr/local/sbin
+      ansible.builtin.copy:
+        src: ../find_nvidia_mdevs.sh
+        dest: /usr/local/sbin/
+        owner: root
+        group: root
+        mode: 0744
+
+    - name: Copy files to /etc/saved_nvidia_mdevs
+      ansible.builtin.copy:
+        src: ../{{ item }}
+        dest: '/etc/saved_nvidia_mdevs'
+        owner: root
+        group: root
+        mode: 0744
+      loop:
+        - nvidia_mdevs_saver.sh
+        - remove_unused_nvidia_mdevs.sh
+        - nvidia_mdevs_undefined_restore.sh
+
+    - name: Copy .timer units to /etc/systemd/system
+      ansible.builtin.copy:
+        src: ../systemd_timers/{{ item }}
+        dest: '/etc/systemd/system/'
+        owner: root
+        group: root
+        mode: 0644
+      loop:
+        - remove_unused_nvidia_mdevs.timer
+        - save_nvidia_mdevs.timer
+
+    - name: Copy .service units to /etc/systemd/system
+      ansible.builtin.copy:
+        src: ../systemd_units/{{ item }}
+        dest: '/etc/systemd/system/'
+        owner: root
+        group: root
+        mode: 0644
+      loop:
+        - remove_unused_nvidia_mdevs.service
+        - restore_nvidia_mdevs.service
+        - save_nvidia_mdevs_reboot_shutdown.service
+        - save_nvidia_mdevs.service
+
+    - name: Enable .timer units..
+      ansible.builtin.systemd:
+        state: started
+        name: "{{ item }}"
+        enabled: true
+        daemon_reload: yes
+      loop:
+        - remove_unused_nvidia_mdevs.timer
+        - save_nvidia_mdevs.timer
+        
+    - name: Enable needed .service units..
+      ansible.builtin.systemd:
+        name: "{{ item }}"
+        enabled: true
+        daemon_reload: yes
+      loop:
+        - save_nvidia_mdevs_reboot_shutdown.service
+

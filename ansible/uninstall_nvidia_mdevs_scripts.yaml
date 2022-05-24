@@ -1,0 +1,55 @@
+---
+- name: Uninstall nvidia mdevs scripts
+  hosts: all
+  become: true
+  tasks:
+    - name: Disable needed .service units..
+      ansible.builtin.systemd:
+        name: "{{ item }}"
+        enabled: false
+        daemon_reload: yes
+      loop:
+        - save_nvidia_mdevs_reboot_shutdown.service
+    - name: Disable .timer units..
+      ansible.builtin.systemd:
+        state: stopped
+        name: "{{ item }}"
+        enabled: false
+        daemon_reload: yes
+      loop:
+        - remove_unused_nvidia_mdevs.timer
+        - save_nvidia_mdevs.timer
+
+    - name: Remove .service units in /etc/systemd/system
+      ansible.builtin.file:
+        path: /etc/systemd/system/{{ item }}
+        state: absent
+      loop:
+        - remove_unused_nvidia_mdevs.service
+        - restore_nvidia_mdevs.service
+        - save_nvidia_mdevs_reboot_shutdown.service
+        - save_nvidia_mdevs.service
+
+    - name: Remove .timer units in /etc/systemd/system
+      ansible.builtin.file:
+        path: /etc/systemd/system/{{ item }}
+        state: absent
+      loop:
+        - remove_unused_nvidia_mdevs.timer
+        - save_nvidia_mdevs.timer
+
+    - name: Remove find_nvidia_mdevs.sh
+      ansible.builtin.file:
+        path: /usr/local/sbin/find_nvidia_mdevs.sh
+        state: absent
+
+    - name: Remove /etc/saved_nvidia_mdevs..
+      ansible.builtin.file:
+        path: /etc/saved_nvidia_mdevs
+        state: absent
+
+    - name: Uninstall mdevctl
+      apt:
+        name: mdevctl
+        state: absent
+        update_cache: yes

@@ -1,0 +1,16 @@
+all:
+  vars:
+  hosts:
+    # ssh_tunnelled_host:
+    #   ansible_host: www.zzz.yyy.xxx
+    #   ansible_user: ubuntu
+    #   ansible_ssh_private_key_file: ~/.ssh/id_rsa
+    #   ansible_ssh_common_args: '-oStrictHostKeyChecking=no -o ProxyCommand="ssh -W %h:%p -q USER@JUMPHOST"'
+
+    example_host:
+      ansible_host: xxx.yyy.zzz.www
+      ansible_connection: ssh
+      ansible_port: 22
+      ansible_user: ubuntu
+      # ansible_password:
+      ansible_ssh_private_key_file: ~/.ssh/id_rsa
