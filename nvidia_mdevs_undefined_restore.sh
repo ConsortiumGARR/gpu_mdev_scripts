@@ -7,7 +7,7 @@ DEFAULT_SAVED_MDEVS=/etc/saved_nvidia_mdevs/nvidia_mdevs
 SHUTDOWN_REBOOT_SAVED_MDEVS=/etc/saved_nvidia_mdevs/nvidia_mdevs.reboot
 SAVED_MDEVS=""
 
-# You may need to adjust this variable..
+# You may need to adjust these variables..
 SYSPATH="/sys/devices/pci*"
 CREATE_PATH="/mdev_supported_types/nvidia-315/create"
 

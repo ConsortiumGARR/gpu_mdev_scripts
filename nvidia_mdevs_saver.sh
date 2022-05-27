@@ -2,6 +2,10 @@
 
 SAVED_MDEVS=/etc/saved_nvidia_mdevs/nvidia_mdevs
 
+# You may need to adjust these variables..
+SYSPATH="/sys/devices/pci*"
+CREATE_PATH="/mdev_supported_types/nvidia-315/create"
+
 # if alternative saving dir is specified as argument..use it
 if [ ! -z "$1" ]; then
 	SAVED_MDEVS=$1
