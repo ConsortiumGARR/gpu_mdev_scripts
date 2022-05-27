@@ -21,6 +21,13 @@ fi
 
 
 sleep 30
+# check if mdev_supported_types exist, if not then something bad happened..
+# and there is no restore to do, just exit and leave untouched existing SAVED_MDEV file(s)
+CHECK_CREATE_PATH=$(find $SYSPATH -wholename *$CREATE_PATH | wc -l)
+if [ $CHECK_CREATE_PATH -eq 0 ]; then
+    echo "Error: $SYSPATH...$CREATE_PATH does not exist. Can't restore mdevs. Exiting."
+    exit 13
+fi
 #check if SAVED_MDEVS exists and is not empty..
 if [  -s "$SAVED_MDEVS" ]; then
     echo "Current saved mdevs file: $SAVED_MDEVS"

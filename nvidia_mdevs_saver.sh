@@ -12,10 +12,15 @@ MDEVS=`mdevctl list | sort`
 # on a gpu machine we should always have some mdevs in use..
 # if there are errors on reboot or if something goes wrong
 # don't update the mdevs file, we just keep the last non-empty list..
-if [ -n "$MDEVS" ]; then
-    echo "$MDEVS" > $SAVED_MDEVS
+
+# check if mdev_supported_types exist, if not then something bad happened..
+# and there is no restore to do, just exit and leave untouched existing SAVED_MDEV file(s)
+CHECK_CREATE_PATH=$(find $SYSPATH -wholename *$CREATE_PATH | wc -l)
+if [ $CHECK_CREATE_PATH -eq 0 ]; then
+    echo "Error: $SYSPATH...$CREATE_PATH does not exist. Nothing to save. Exiting."
+    exit 13
 else
-    logger -p syslog.info "No mdevs found, something bad happened, check your configuration :("
+    echo "$MDEVS" > $SAVED_MDEVS
 fi 
 
 exit 0
