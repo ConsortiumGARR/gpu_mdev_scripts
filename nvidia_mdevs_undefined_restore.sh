@@ -9,7 +9,7 @@ SAVED_MDEVS=""
 
 # You may need to adjust these variables..
 SYSPATH="/sys/devices/pci*"
-CREATE_PATH="/mdev_supported_types/nvidia-315/create"
+CREATE_PATH="/mdev_supported_types/nvidia-*/create"
 
 # Restore after a clean reboot/shutdown
 if [ -s "$SHUTDOWN_REBOOT_SAVED_MDEVS" ]; then
@@ -37,7 +37,13 @@ if [  -s "$SAVED_MDEVS" ]; then
             UUID=`echo $line | cut -f1 -d " "`
             DEV=`echo $line | cut -f2 -d " "`
             GPU_PATH=`find $SYSPATH -wholename "*/$DEV"`
-            echo $UUID > $GPU_PATH/$CREATE_PATH
+            SUPPORTED_TYPE=`echo $line | cut -f3 -d " "`
+            # full mdev path (GPU_PATH/mdev_supported_types/$SUPPORTED_TYPES/create)
+            # example: /sys/devices/pci0000:17/0000:17:00.0/0000:18:00.0/0000:1a:00.0/mdev_supported_types/nvidia-315/create
+            #          -----------------GPU_PATH-------------------------------------mdev_supported_types/**SUPPORTED_TYPE**/create                           
+            MDEV_PATH=$GPU_PATH/mdev_supported_types/$SUPPORTED_TYPE/create
+#            echo $UUID > $GPU_PATH/$CREATE_PATH
+            echo $UUID > $MDEV_PATH
         fi
     done < "$SAVED_MDEVS"
     if [ -f "$SHUTDOWN_REBOOT_SAVED_MDEVS" ]; then
